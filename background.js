@@ -1,23 +1,34 @@
-const openInDocland = () => {
-  chrome.tabs.executeScript({
-    code: `window.location.replace("https://docland.app/" + window.location.href);`
+chrome.runtime.onInstalled.addListener(function() {
+  chrome.contextMenus.create({
+    id: "open-page-in-docland",
+    title: "Open page in Docland",
+    contexts: ["page", "selection"],
+    parentId: undefined
   });
-};
-
-chrome.action.onClicked.addListener((tab) => {
-  console.log("Hi", tab.url);
-  chrome.scripting.executeScript(
-    {
-      target: { tabId: tab.id },
-      function: () => {
-        window.location.replace("https://docland.app/" + window.location.href);
-      }
-    });
-  // openInDocland()
+  chrome.contextMenus.create({
+    contexts: ["link"],
+    id: "open-link-in-docland",
+    title: "Open link %s in Docland",
+    parentId: undefined
+  });
 });
 
-chrome.commands.onCommand.addListener(command => {
-  if (command === "open-in-docland") {
-    openInDocland();
+function openPageInDocland(url, tabId) {
+  if (tabId) {
+    chrome.tabs.update(tabId, { url: "https://docland.app/" + url });
+  } else {
+    chrome.tabs.create({ url: "https://docland.app/" + url });
   }
+}
+
+chrome.contextMenus.onClicked.addListener(function(info, tab) {
+  if (info.menuItemId === 'open-page-in-docland') {
+    openPageInDocland(info.pageUrl, tab.id);
+  } else if (info.menuItemId === 'open-link-in-docland') {
+    openPageInDocland(info.linkUrl)
+  }
+});
+
+chrome.action.onClicked.addListener((tab) => {
+  openPageInDocland(tab.url, tab.id);
 });
