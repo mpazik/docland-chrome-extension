@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "Docland - Chrome extension",
+  "version": "1.0",
+  "description": "Opens a page in Docland, a single place for your documents. All your articles, ebooks, notes in ONE place; synchronized with your cloud drive, with full privacy, display preferences, personal comments, search, categorization, and offline access",
+  "icons": {
+    "16": "/images/logo16.png",
+    "32": "/images/logo32.png",
+    "48": "/images/logo48.png",
+    "128": "/images/logo128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "/images/logo16.png",
+      "32": "/images/logo32.png",
+      "48": "/images/logo48.png",
+      "128": "/images/logo128.png"
+    },
+    "default_title": "Open in Docland"
+  },
+  "commands": {
+    "open-in-docland": {
+      "suggested_key": {
+        "mac": "Command+Shift+A",
+        "default": "Alt+Shift+A"
+      },
+      "description": "Open in Docland"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "externally_connectable": {
+    "matches": [
+      "*://localhost/*",
+      "*://docland.app/*"
+    ]
+  }
+}
